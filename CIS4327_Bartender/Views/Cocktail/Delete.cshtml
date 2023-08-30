@@ -1,0 +1,39 @@
+﻿@model CIS4327_Bartender.Models.Cocktail.DeleteCocktailModel
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Delete Cocktail</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+        <h4>Are you sure you would like to delete this cocktail?</h4>
+        <form asp-controller="Cocktail" asp-action="DeleteCocktail" asp-route-id="@Model.CocktailId" method="POST">
+            <div>
+                @Model.Name [@Model.CocktailId]
+                <br />
+                @Model.Description @Model.Price
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Delete" class="btn btn-primary" />
+            </div>
+        </form>
+        <form asp-controller="Employee" asp-action="Index">
+            <div class="form-group">
+                <input type="submit" value="Go Back" class="btn btn-danger" />
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,60 @@
+﻿.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: black;
+    margin-top: 4px;
+}
+.dot-container{
+    display: grid;
+    place-items: center;
+    border: 1px black;
+    display: flex;
+    justify-content: right;
+}
+.dot-menu {
+    cursor: pointer;
+}
+.dot-style{
+    width: 160px;
+    height: 80px;
+    background-color: ghostwhite;
+    margin-top: 5px;
+    margin-left: -180px;
+    border-radius: 10px;
+    border: 1px black;
+}
+.frame{
+    visibility:hidden;
+    display: block;
+}
+.frame .info{
+    font-size: 20px;
+    color: black;
+    padding-top: 10px;
+    cursor: pointer;
+}
+.frame .info:hover{
+    background-color: antiquewhite;
+    border-radius: 10px;
+}
+.frame .info a{
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+}
+
+.list {
+    text-align: left;
+    justify-content: left;
+    display: inline-block;
+}
+.list dl{
+
+}
+.list dt{
+
+}
+.list dl{
+
+}

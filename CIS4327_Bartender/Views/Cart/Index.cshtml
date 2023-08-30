@@ -1,0 +1,49 @@
+﻿@model CIS4327_Bartender.Models.Cart.CartIndexModel
+
+<h2>Your cart</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th class="text-right">Price</th>
+            <th class="text-right">Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.cart.CartLineList)
+        {
+            <tr>
+                <td class="text-center">@line.Quantity</td>
+                <td class="text-left">@line.Cocktail.Name</td>
+                <td class="text-right">@line.Cocktail.Price.ToString("c")</td>
+                <td class="text-right">
+                    @((line.Quantity * line.Cocktail.Price).ToString("c"))
+                </td>
+                <td>
+                    <form asp-action="RemoveFromCart" asp-route-id="@line.Cocktail.CocktailId" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger ">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right">Total:</td>
+            <td class="text-right">
+                @Model.totalValue.ToString("c")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<div class="text-center">
+    <a class="btn btn-primary" asp-action="Index" asp-controller="Menu">Continue shopping</a>
+
+    <form asp-controller="Order" asp-action="Checkout" method="post">
+        <div class="form-group">
+            <input type="submit" value="Checkout" class="btn btn-primary" />
+        </div>
+    </form>
+</div> 

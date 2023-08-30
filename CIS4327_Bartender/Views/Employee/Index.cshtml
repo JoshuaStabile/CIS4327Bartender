@@ -1,0 +1,47 @@
+﻿@model CIS4327_Bartender.Models.Employee.EmployeeIndexModel;
+
+@{
+    ViewBag.Title = "Employee Dashboard";
+}
+
+<h1>Employee Index</h1>
+<hr />
+<h4>
+    <a asp-controller="Cocktail" asp-action="Index"> Cocktails </a>
+</h4>
+<h4>
+    <a asp-controller="Order" asp-action="Index"> Orders </a>
+</h4>
+<h4>
+    <a asp-controller="Order" asp-action="Queue"> Order Queue </a>
+</h4>
+<a asp-controller="Cocktail" asp-action="Create" class="btn btn-primary"> Create </a>
+<a asp-controller="Cocktail" asp-action="Search" asp-route-id="Edit" class="btn btn-primary"> Edit </a>
+<a asp-controller="Cocktail" asp-action="Search" asp-route-id="Delete" class="btn btn-primary"> Delete </a>
+<div class="row">
+    <div class="col-md-4">
+        <dl>
+            @foreach (var cocktail in Model.CocktailList)
+            {
+                <div class="dot-container" id="dotContainer-@cocktail.CocktailId">
+                    <dd class="dot-menu" id="dotMenu-@cocktail.CocktailId">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </dd>
+
+                    <dd class="frame dot-style" id="frame-@cocktail.CocktailId">
+                        <div class="info" id="info-@cocktail.CocktailId">
+                            <a asp-action="Edit" asp-controller="Cocktail" asp-route-id="@cocktail.CocktailId">Edit</a>
+                        </div>
+                        <div class="info" id="info-@cocktail.CocktailId">
+                            <a asp-action="Delete" asp-controller="Cocktail" asp-route-id="@cocktail.CocktailId">Delete</a>
+                        </div>
+                    </dd>
+                </div>
+                <dt class="list">@cocktail.Name [@cocktail.CocktailId]</dt>
+                <dd class="list">@cocktail.Description</dd>
+            }
+        </dl>
+    </div>
+</div>

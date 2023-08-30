@@ -1,0 +1,36 @@
+﻿@model CIS4327_Bartender.Models.Account.ChangeRoleAccountModel
+
+@{
+    ViewData["Title"] = "Log In";
+    Layout = "_Layout";
+}
+
+<div class="text-danger" asp-validation-summary="All"></div>
+
+<form asp-controller="Account" asp-action="ChangeRole" method="POST">
+    <input type="hidden" asp-for="UserId" value="@Model.UserId"/>
+    <div class="form-group">
+        <div>
+            @Model.UserName [@Model.UserId]
+        </div>
+        <div>
+            @Model.UserEmail
+        </div>
+        <div>
+            <b>Current Role: @Model.CurrentRoleName</b>
+        </div>
+        <select name="SelectedRoleName" id="SelectedRoleNameDDL">
+            <option value="Admin">Admin</option>
+            <option value="Employee">Employee</option>
+            <option value="Customer">Customer</option>
+        </select>
+
+    </div>
+
+    <button class="btn btn-primary" type="submit">Change Role</button>
+</form>
+<form asp-controller="Account" asp-action="Index">
+    <div class="form-group">
+        <input type="submit" value="Return To Index" class="btn btn-primary" />
+    </div>
+</form>

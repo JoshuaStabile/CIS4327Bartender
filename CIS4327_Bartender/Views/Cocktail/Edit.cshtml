@@ -1,0 +1,45 @@
+﻿@model CIS4327_Bartender.Models.Cocktail.EditCocktailModel
+
+@{
+    ViewData["Title"] = "Edit Cocktail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Cocktail</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditCocktail" method="POST">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NewName" class="control-label"></label>
+                <input asp-for="NewName" class="form-control" placeholder="@Model.OldName"/>
+                <span asp-validation-for="NewName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewDescription" class="control-label"></label>
+                <input asp-for="NewDescription" class="form-control" placeholder="@Model.OldDescription"/>
+                <span asp-validation-for="NewDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewPrice" class="control-label"></label>
+                <input asp-for="NewPrice" class="form-control" placeholder="@Model.OldPrice" value =""/>
+                <span asp-validation-for="NewPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+            <input type="hidden" asp-for="TempCocktailId" value="@Model.TempCocktailId" />
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

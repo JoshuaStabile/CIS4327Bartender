@@ -1,0 +1,28 @@
+﻿@model CIS4327_Bartender.Models.Menu.MenuIndexModel
+
+<h1>Menu</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <dl>
+            @foreach (var cocktail in Model.CocktailList)
+            {
+                <div class="dot-container" id="dotContainer-@cocktail.CocktailId">
+                    <dd class="dot-menu" id="dotMenu-@cocktail.CocktailId">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </dd>
+
+                    <dd class="frame dot-style" id="frame-@cocktail.CocktailId">
+                        <div class="info" id="info-@cocktail.CocktailId">
+                            <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@cocktail.CocktailId">Add To Cart</a>
+                        </div>
+                    </dd>
+                </div>
+                <dt class="list">@cocktail.Name [@cocktail.CocktailId]</dt>
+                <dd class="list">@cocktail.Description @cocktail.Price</dd>
+            }
+        </dl>
+    </div>
+</div>

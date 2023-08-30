@@ -1,0 +1,51 @@
+﻿@model CIS4327_Bartender.Models.Order.OrderIndexModel
+
+@{
+    ViewBag.Title = "Orders";
+    Layout = "_Layout";
+    bool rowGuard;
+}
+
+@if (Model.OrderList.Any())
+{
+    <table class="table table-bordered table-striped">
+        @foreach (var order in Model.OrderList)
+        {
+            <tr>
+                <th>OrderId</th>
+                <th colspan="2">Cocktail</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <td>
+                    <form asp-action="MarkReady" asp-route-id="@order.OrderId" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger">Mark As Ready</button>
+                    </form> 
+                    IsReady: @order.IsReady
+                </td>
+            </tr>
+            rowGuard = true;
+            @foreach (var line in order.Lines)
+            {
+                <tr>
+                    <td> 
+                        @if(rowGuard == true)
+                        {
+                            @order.OrderId
+                        }    
+                    </td>
+                    <td colspan="2">@line.Cocktail.Name</td>
+                    <td>@line.Quantity</td>
+                    <td>@line.Cocktail.Price</td>
+                    <td></td>
+                </tr>
+                rowGuard = false;
+            }
+            
+            
+        }
+    </table>
+}
+else
+{
+    <div class="text-center">No Orders</div>
+}

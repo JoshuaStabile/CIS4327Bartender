@@ -1,0 +1,42 @@
+﻿@model CIS4327_Bartender.Models.Account.EditAccountModel
+
+@{
+    ViewData["Title"] = "Edit Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Account</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditAccount" method="POST">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TempUserId" value="@Model.TempUserId" />
+            <input type="hidden" asp-for="TempSecurityStamp" value="@Model.TempSecurityStamp" />
+
+            <div class="form-group">
+                <label asp-for="NewUserName" class="control-label"></label>
+                <input asp-for="NewUserName" class="form-control" placeholder="@Model.OldUserName" />
+                <span asp-validation-for="NewUserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewUserEmail" class="control-label"></label>
+                <input asp-for="NewUserEmail" class="form-control" placeholder="@Model.OldUserEmail" />
+                <span asp-validation-for="NewUserEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Return To Index</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

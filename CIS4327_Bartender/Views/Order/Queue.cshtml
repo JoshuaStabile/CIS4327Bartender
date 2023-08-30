@@ -1,0 +1,58 @@
+﻿@model CIS4327_Bartender.Models.Order.OrderQueueModel
+
+@{
+    ViewBag.Title = "Order Queue";
+    Layout = "_Layout";
+    bool rowGuard;
+}
+
+@if (Model.OrderQueueList.Any())
+{
+    <table class="table table-bordered table-striped">
+        @foreach (var order in Model.OrderQueueList)
+        {
+            <tr>
+                <th>OrderId</th>
+                <th colspan="2">Cocktail</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Time</th>
+                <td>
+                    <form asp-action="QueueMarkReady" asp-route-id="@order.OrderId" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger">Mark As Ready</button>
+                    </form>
+                    IsReady: @order.IsReady
+                </td>
+            </tr>
+            rowGuard = true;
+            @foreach (var line in order.Lines)
+            {
+                <tr>
+                    <td>
+                        @if (rowGuard == true)
+                        {
+                            @order.OrderId
+                        }
+                    </td>
+                    <td colspan="2">@line.Cocktail.Name</td>
+                    <td>@line.Quantity</td>
+                    <td>@line.Cocktail.Price</td>
+                    <td></td>
+                    <td>
+                        @if (rowGuard == true)
+                        {
+                            @order.CreatedDate
+                        }
+                    </td>
+                </tr>
+                rowGuard = false;
+            }
+
+
+        }
+    </table>
+}
+else
+{
+    <div class="text-center">The Order Queue Is Empty</div>
+}
