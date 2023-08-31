@@ -13,7 +13,7 @@ namespace CIS4327_Bartender.Models.Account
         [Required]
         [UIHint("password")]
         public string Password { get; set; }
-
         public string ReturnUrl { get; set; } = "/";
+
     }
 }

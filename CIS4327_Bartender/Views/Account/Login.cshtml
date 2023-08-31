@@ -8,7 +8,7 @@
 <div class="text-danger" asp-validation-summary="All"></div> 
  
 <form asp-controller="Account" asp-action="LoginAccount" method="POST">
-    <input type="hidden" asp-for="ReturnUrl" /> 
+    <input type="hidden" asp-for="ReturnUrl" value=""/>
     <div class="form-group"> 
         <label asp-for="Email"></label> 
         <div><span asp-validation-for="Email" class="text-danger"></span></div> 

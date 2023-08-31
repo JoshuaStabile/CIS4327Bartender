@@ -20,7 +20,7 @@ namespace CIS4327_Bartender.Controllers
             _roleManager = roleManager;
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public ViewResult Index()
         {
             var model = new AccountIndexModel
@@ -33,15 +33,12 @@ namespace CIS4327_Bartender.Controllers
 
 
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl)
+        public ViewResult Login(string returnUrl)
         {
-            var model = new LoginAccountModel
+            return View(new LoginAccountModel
             {
                 ReturnUrl = returnUrl
-            };
-
-
-            return View(model);
+            });
         }
 
 
@@ -50,29 +47,38 @@ namespace CIS4327_Bartender.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginAccount(LoginAccountModel model)
         {
-            if (ModelState.IsValid)
+            AppUser user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null)
             {
-                AppUser user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null)
+                await _signInManager.SignOutAsync();
+                if ((await _signInManager.PasswordSignInAsync(user, model.Password, false, false)).Succeeded)
                 {
-                    await _signInManager.SignOutAsync();
-                    if ((await _signInManager.PasswordSignInAsync(user,
-                        model.Password, false, false)).Succeeded)
-                    {
-                        TempData["message"] = "Logged in successfully";
-                        return RedirectToAction("Index", "Home");
-                    }
+                    HttpContext.Session.SetString("CurrentUserName", user.UserName);
 
+                    var roleNameList = await _userManager.GetRolesAsync(user);
+                    if (roleNameList  != null)
+                    {
+                        TempData["message"] = roleNameList.FirstOrDefault() + " logged in successfully";
+
+                        if (roleNameList.FirstOrDefault().Equals("Admin"))
+                        {
+                            return RedirectToAction("Index", "Account");
+                        }
+                    }
+                    
+                    return RedirectToAction("Index", "Home");
                 }
+
             }
-            ModelState.AddModelError("", "Invalid name or password");
+            
             return RedirectToAction("Index", "Home");
         }
 
-        public async Task<RedirectResult> Logout(string returnUrl = "/")
+        public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return Redirect(returnUrl);
+            HttpContext.Session.SetString("CurrentUserName", String.Empty);
+            return RedirectToAction("Index", "Home");
         }
 
         [AllowAnonymous]
@@ -87,42 +93,28 @@ namespace CIS4327_Bartender.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAccount(LoginAccountModel model)
         {
-            if (ModelState.IsValid)
+            AppUser user = new AppUser
             {
-                AppUser user = new AppUser
-                {
-                    UserName = model.UserName,
-                    Email = model.Email
-                };
-                Console.WriteLine(model.Password);
-                IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+                UserName = model.UserName,
+                Email = model.Email
+            };
+            Console.WriteLine(model.Password);
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
-                if (result.Succeeded)
-                {
-                    //await signInManager.SignInAsync(user, isPersistent: false); 
-                    TempData["message"] = "Account created successfully";
-                    await _userManager.AddToRoleAsync(user, "Customer");
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    foreach (IdentityError error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                }
+            if (result.Succeeded)
+            {
+                //await signInManager.SignInAsync(user, isPersistent: false); 
+
+                HttpContext.Session.SetString("CurrentUserName", user.UserName);
+                TempData["message"] = "Account created successfully";
+                await _userManager.AddToRoleAsync(user, "Customer");
+                return RedirectToAction("Index", "Home");
             }
+            
             return RedirectToAction("Index", "Home");
         }
 
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (IdentityError error in result.Errors)
-            {
-                ModelState.TryAddModelError("", error.Description);
-            }
-        }
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             AppUser user = await _userManager.FindByIdAsync(id);
@@ -135,10 +127,7 @@ namespace CIS4327_Bartender.Controllers
                     TempData["message"] = "User deleted successfully";
                     return RedirectToAction("Index", "Account");
                 }
-                else
-                {
-                    AddErrors(result);
-                }
+                
             }
             else
             {
@@ -149,6 +138,7 @@ namespace CIS4327_Bartender.Controllers
             return View("Index", _userManager.Users);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(string id)
         {
             AppUser oldUser = await _userManager.FindByIdAsync(id);
@@ -170,6 +160,7 @@ namespace CIS4327_Bartender.Controllers
             return RedirectToAction("Index", "Account");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditAccount (EditAccountModel model)
         {
             // Console.WriteLine("Test1 " + model.NewUserName + model.NewUserEmail);
@@ -190,6 +181,7 @@ namespace CIS4327_Bartender.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Role(string id)
         {
             AppUser user = await _userManager.FindByIdAsync(id);
@@ -217,7 +209,7 @@ namespace CIS4327_Bartender.Controllers
 
 
         [HttpPost]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeRole(ChangeRoleAccountModel model)
         {
             Console.WriteLine("Test: " + model.UserId + " AND " + model.SelectedRoleName);

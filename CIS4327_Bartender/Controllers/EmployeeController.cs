@@ -1,9 +1,9 @@
 ﻿using CIS4327_Bartender.Models.Cocktail;
 using CIS4327_Bartender.Models.Data;
 using CIS4327_Bartender.Models.Employee;
-using CIS4327_Bartender.Services;
 using CIS4327_Bartender.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CIS4327_Bartender.Controllers
 {
@@ -18,6 +18,7 @@ namespace CIS4327_Bartender.Controllers
             _orderService = orderService;
         }
 
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Index()
         {
             var cocktails = _cocktailService.GetAmount(10);

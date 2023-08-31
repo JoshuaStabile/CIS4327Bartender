@@ -4,6 +4,8 @@ using CIS4327_Bartender.Models.Data;
 using CIS4327_Bartender.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Core.Types;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 /**
  * Plan - A currentOrder object is created when entering the menu. 
@@ -28,6 +30,7 @@ namespace CIS4327_Bartender.Controllers
             cart = cartService;
         }
 
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Index()
         {
             var orderList = _orderService.GetAllOrdersIncludeLinesAndCocktails().ToList();
@@ -46,6 +49,7 @@ namespace CIS4327_Bartender.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> MarkReady (int id)
         {
             await _orderService.MarkReady(id);
@@ -54,6 +58,7 @@ namespace CIS4327_Bartender.Controllers
 
         }
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> QueueMarkReady(int id)
         {
             await _orderService.MarkReady(id);
@@ -93,6 +98,7 @@ namespace CIS4327_Bartender.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Queue ()
         {
             var orderQueue = _orderService.GetOrderQueue();
@@ -105,7 +111,5 @@ namespace CIS4327_Bartender.Controllers
             return View(model);
         }
 
-        // AddOrderQueue
-        // RemoveOrderQueue
     }
 }

@@ -16,6 +16,7 @@ builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IServiceProvider, ServiceProvider>();
 builder.Services.AddScoped<Cart>(sp => SessionCartModel.GetCart(sp));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services.AddSession(); // ADDED
 builder.Services.AddMvc();
 

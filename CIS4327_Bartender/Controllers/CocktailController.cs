@@ -1,7 +1,9 @@
 ﻿using CIS4327_Bartender.Models.Cocktail;
 using CIS4327_Bartender.Models.Data;
 using CIS4327_Bartender.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace CIS4327_Bartender.Controllers
 {
@@ -14,6 +16,7 @@ namespace CIS4327_Bartender.Controllers
             _cocktailService = cocktailService;
         }
 
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Index()
         {
             var cocktails = _cocktailService.GetAll();
@@ -26,11 +29,13 @@ namespace CIS4327_Bartender.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Edit(int id)
         {
             // Console.WriteLine(id);
@@ -46,7 +51,8 @@ namespace CIS4327_Bartender.Controllers
 
             return View(model);
         }
-        
+
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Delete(int id)
         {
             var cocktail = _cocktailService.GetById(id);
@@ -62,6 +68,7 @@ namespace CIS4327_Bartender.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Search(string id)
         {
             var model = new SearchCocktailModel
@@ -76,6 +83,7 @@ namespace CIS4327_Bartender.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> CreateCocktail(CreateCocktailModel model)
         {
             Cocktail cocktail = new Cocktail
@@ -92,6 +100,7 @@ namespace CIS4327_Bartender.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> EditCocktail(EditCocktailModel model)
         {
             // Console.WriteLine(model.TempCocktailId);
@@ -109,6 +118,7 @@ namespace CIS4327_Bartender.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> DeleteCocktail(int id)
         {
             await _cocktailService.Delete(id);
@@ -118,6 +128,7 @@ namespace CIS4327_Bartender.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> SearchCocktail(SearchCocktailModel model, string id)
         {
             int SearchId = model.SearchId;
